@@ -1,0 +1,26 @@
+users:
+  - id: 1
+    login: MichaelS
+    password: password123
+    email: Michael@example.com
+    firstName: Michael
+    lastName: Scott
+    birthday: 1990-05-15
+    role_id: 1
+  - id: 2
+    login: DwightS
+    password: Dwight123
+    email: Dwight@example.com
+    firstName: Dwight
+    lastName: Schrute
+    birthday: 1992-09-22
+    role_id: 1
+  - id: 3
+    login: CreedB
+    password: creed123
+    email: Creed@example.com
+    firstName: Creed
+    lastName: Branthon
+    birthday: 1940-11-21
+    role_id: 2
+

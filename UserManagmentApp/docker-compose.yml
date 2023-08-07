@@ -1,0 +1,60 @@
+version: '3'
+services:
+  fekete-database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+    ports:
+      - "5432:5432"
+    networks:
+      - appnetwork
+    volumes:
+      - ./src/main/resources/sql/ddl.sql:/docker-entrypoint-initdb.d/ddl.sql
+      - ./src/main/resources/sql/dml.sql:/docker-entrypoint-initdb.d/dml.sql
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  fekete-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - appnetwork
+    depends_on:
+     fekete-database:
+      condition: service_healthy
+
+  fekete-app-test:
+    build:
+      context: ../API_Test/.
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8080
+    volumes:
+      - ./surefire_report:/app/target/surefire-reports/
+    networks:
+      - appnetwork
+    depends_on:
+       - fekete-app
+    command: >
+      sh -c "sleep 10 && mvn verify"
+
+networks:
+  appnetwork:
+    driver: bridge
+
+
+
+
+
+
+
+
+
+
